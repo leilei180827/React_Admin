@@ -12,6 +12,7 @@ router.post("/", async (req, res) => {
         username: req.username,
       },
     });
+    return;
   }
   //first time login or token expires
   let username = req.body.username,
@@ -20,6 +21,7 @@ router.post("/", async (req, res) => {
     const user = await User.findOne({ username });
     if (!user) {
       throw new Error("user not found");
+      // res.status(501).json({ success: false, message: "user not found" });
       // res.json(501)({ success: false, message: "User not found" });
     }
     const isMatch = await bcrypt.compare(password, user.password);
@@ -44,7 +46,6 @@ router.post("/", async (req, res) => {
       },
     });
   } catch (error) {
-    console.log(error);
     res.status(501).json({ success: false, message: error.toString() });
   }
 });
