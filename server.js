@@ -11,11 +11,12 @@ const isAuth = require("./middleware/authUser");
 /* =======================
     LOAD THE CONFIG
 ==========================*/
-const mongo_config = require("./config/mongo_db").mongo_config;
+const mongo_config = require("./config").mongo_config;
 const port = process.env.PORT || 5000;
 
 // Load routers
 const login_router = require("./routes/login");
+const register_router = require("./routes/register");
 
 /* =======================
     EXPRESS CONFIGURATION
@@ -30,8 +31,8 @@ app.use(isAuth);
 // print the request log on console
 // app.use(morgan("dev"));
 
-// set the secret key variable for jwt
-app.set("jwt-secret", jwt_secret);
+// // set the secret key variable for jwt
+// app.set("jwt-secret", jwt_secret);
 
 // index page, just for testing
 app.get("/", (req, res) => {
@@ -40,6 +41,7 @@ app.get("/", (req, res) => {
 
 // configure api router
 app.use("/login", login_router);
+app.use("/register", register_router);
 // app.use("/api", require("./routes/api"));
 
 // open the server
