@@ -33,15 +33,14 @@ app.use(isAuth);
 
 // // set the secret key variable for jwt
 // app.set("jwt-secret", jwt_secret);
-
+// configure api router
+app.use("/login", login_router);
+app.use("/register", register_router);
 // index page, just for testing
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-// configure api router
-app.use("/login", login_router);
-app.use("/register", register_router);
 // app.use("/api", require("./routes/api"));
 
 // open the server

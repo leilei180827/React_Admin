@@ -1,11 +1,23 @@
 import React from "react";
 import "./login.less";
 import logo from "../../assets/img/logo.png";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-export default function Login() {
+// import { login } from "../../network/login";
+import axios from "axios";
+import { login } from "../../network/login";
+export default function Login(props) {
   const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+    login(values)
+      // axios
+      //   .post(`/login`, values)
+      // login_post(values)
+      .then(({ data }) => {
+        data.success
+          ? props.history.replace("/admin")
+          : message.error(data.message);
+      })
+      .catch((error) => message.error(error));
   };
   const rules = [
     {

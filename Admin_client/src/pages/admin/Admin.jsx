@@ -15,7 +15,7 @@ import Line from "../charts/line/line";
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
-export default function Admin() {
+export default function Admin(props) {
   const [collapsed, setCollapsed] = useState(false);
   const onCollapse = () => {
     setCollapsed(!collapsed);
@@ -49,37 +49,31 @@ export default function Admin() {
           <img src={logo} alt="logo" />
           <span className="first-title">React</span>
         </div>
-        <Menu theme="dark" defaultSelectedKeys={["/home"]} mode="inline">
+        <Menu
+          theme="dark"
+          defaultSelectedKeys={[props.location.pathname]}
+          mode="inline"
+        >
           {generateMenuList(menus)}
         </Menu>
       </Sider>
       <Layout className="site-layout">
         <Header className="site-layout-background" style={{ padding: 0 }} />
-        <Switch>
-          <Route path="/home" component={Home}></Route>
-          <Route path="/category" component={Category}></Route>
-          <Route path="/product" component={Product}></Route>
-          <Route path="/user" component={User}></Route>
-          <Route path="/role" component={Role}></Route>
-          <Route path="/charts/bar" component={Bar}></Route>
-          <Route path="/charts/line" component={Line}></Route>
-          <Route path="/charts/pie" component={Pie}></Route>
-          <Redirect to="/home" />
-        </Switch>
         <Content style={{ margin: "0 16px" }}>
-          <Breadcrumb style={{ margin: "16px 0" }}>
-            <Breadcrumb.Item>User</Breadcrumb.Item>
-            <Breadcrumb.Item>Bill</Breadcrumb.Item>
-          </Breadcrumb>
-          <div
-            className="site-layout-background"
-            style={{ padding: 24, minHeight: 360 }}
-          >
-            Bill is a cat.
-          </div>
+          <Switch>
+            <Route path="/home" component={Home}></Route>
+            <Route path="/category" component={Category}></Route>
+            <Route path="/product" component={Product}></Route>
+            <Route path="/user" component={User}></Route>
+            <Route path="/role" component={Role}></Route>
+            <Route path="/charts/bar" component={Bar}></Route>
+            <Route path="/charts/line" component={Line}></Route>
+            <Route path="/charts/pie" component={Pie}></Route>
+            <Redirect to="/home" />
+          </Switch>
         </Content>
         <Footer style={{ textAlign: "center" }}>
-          Ant Design ©2018 Created by Ant UED
+          React Admin System @2020 Designed By Leilei
         </Footer>
       </Layout>
     </Layout>

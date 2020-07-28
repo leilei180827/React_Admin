@@ -14,6 +14,9 @@ const User = new Schema(
       type: Number,
       default: 1,
     },
+    portrait: {
+      type: String,
+    },
   },
   {
     timestamps: true,

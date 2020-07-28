@@ -30,7 +30,7 @@ router.post("/", async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(501).json({ success: false, message: error.toString() });
+    res.status(201).json({ success: false, message: error.toString() });
   }
 });
 module.exports = router;
