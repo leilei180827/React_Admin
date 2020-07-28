@@ -1,25 +1,40 @@
+import React from "react";
+import {
+  DesktopOutlined,
+  FileOutlined,
+  TeamOutlined,
+  UserOutlined,
+  HomeOutlined,
+  AppstoreOutlined,
+  TagsOutlined,
+  ShoppingOutlined,
+  AreaChartOutlined,
+  BarChartOutlined,
+  LineChartOutlined,
+  PieChartOutlined,
+} from "@ant-design/icons";
 const menus = [
   {
     title: "home", //
     key: "/home", // path router
-    icon: "home", // icon HomeOutlined
+    icon: <HomeOutlined />, // icon HomeOutlined
     isPublic: true,
   },
   {
     title: "products",
     key: "/products",
-    icon: "appstore", //<AppstoreOutlined />
+    icon: <AppstoreOutlined />,
     children: [
       // sub menu
       {
         title: "category",
         key: "/category",
-        icon: "bars", //<TagsOutlined />
+        icon: <TagsOutlined />,
       },
       {
         title: "product",
         key: "/product",
-        icon: "tool", //<ShoppingOutlined />
+        icon: <ShoppingOutlined />,
       },
     ],
   },
@@ -27,33 +42,33 @@ const menus = [
   {
     title: "user",
     key: "/user",
-    icon: "user", //UserOutlined,
+    icon: <UserOutlined />,
   },
   {
     title: "role",
     key: "/role",
-    icon: "safety", //TeamOutlined,
+    icon: <TeamOutlined />,
   },
 
   {
     title: "charts",
     key: "/charts",
-    icon: "area-chart", //<AreaChartOutlined />
+    icon: <AreaChartOutlined />,
     children: [
       {
         title: "bar",
         key: "/charts/bar",
-        icon: "bar-chart", //<BarChartOutlined />
+        icon: <BarChartOutlined />,
       },
       {
         title: "line",
         key: "/charts/line",
-        icon: "line-chart", //<LineChartOutlined />
+        icon: <LineChartOutlined />,
       },
       {
         title: "pie",
         key: "/charts/pie",
-        icon: "pie-chart", //<PieChartOutlined />
+        icon: <PieChartOutlined />,
       },
     ],
   },
