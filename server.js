@@ -15,8 +15,9 @@ const mongo_config = require("./config").mongo_config;
 const port = process.env.PORT || 5000;
 
 // Load routers
-const login_router = require("./routes/login");
-const register_router = require("./routes/register");
+const login_route = require("./routes/login");
+const register_route = require("./routes/register");
+const category_route = require("./routes/category");
 
 /* =======================
     EXPRESS CONFIGURATION
@@ -34,8 +35,10 @@ app.use(isAuth);
 // // set the secret key variable for jwt
 // app.set("jwt-secret", jwt_secret);
 // configure api router
-app.use("/login", login_router);
-app.use("/register", register_router);
+app.use("/login", login_route);
+app.use("/register", register_route);
+app.use("/category", category_route);
+// app.use("/product", product_route);
 // index page, just for testing
 app.get("/", (req, res) => {
   res.send("Hello World");

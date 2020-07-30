@@ -1,0 +1,46 @@
+.admin-header {
+  height: 80px;
+  .admin-header-top {
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 1px solid #1da57a;
+    text-align: right;
+    padding-right: 30px;
+    span:nth-child(1) {
+      margin-right: 5px;
+    }
+    span:nth-child(2) {
+      margin-right: 15px;
+      font-weight: 700;
+    }
+  }
+  .admin-header-bottom {
+    height: 40px;
+    line-height: 40px;
+    display: flex;
+    align-items: center;
+    padding-right: 30px;
+    .title {
+      font-size: 20px;
+      font-weight: 700;
+      width: 30%;
+      text-transform: uppercase;
+      text-align: center;
+      position: relative;
+      &::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border-top: 15px solid #1da57a;
+        border-right: 15px solid transparent;
+        border-left: 15px solid transparent;
+      }
+    }
+    .clock {
+      width: 70%;
+      text-align: right;
+    }
+  }
+}

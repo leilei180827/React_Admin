@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { Link, Redirect, Switch, Route } from "react-router-dom";
-import menus from "../../config/menus";
+
 import { Layout, Menu, Breadcrumb } from "antd";
+
 import logo from "../../assets/img/logo.png";
 import "./admin.less";
+
+import menus from "../../config/menus";
 import Home from "../home/home";
 import Category from "../category/category";
 import Product from "../product/product";
@@ -12,6 +15,7 @@ import User from "../user/user";
 import Bar from "../charts/bar/bar";
 import Pie from "../charts/pie/pie";
 import Line from "../charts/line/line";
+import AdminHeader from "../../components/admin_header/admin_header";
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -58,8 +62,10 @@ export default function Admin(props) {
         </Menu>
       </Sider>
       <Layout className="site-layout">
-        <Header className="site-layout-background" style={{ padding: 0 }} />
-        <Content style={{ margin: "0 16px" }}>
+        <Header className="site-layout-background">
+          <AdminHeader></AdminHeader>
+        </Header>
+        <Content style={{ padding: "20px", backgroundColor: "#5d6966" }}>
           <Switch>
             <Route path="/home" component={Home}></Route>
             <Route path="/category" component={Category}></Route>
