@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
       categories: categories,
     });
   } catch (error) {
-    res.status(201).json({ success: false, error: error.toString() });
+    res.status(201).json({ success: false, message: error.toString() });
   }
 });
 router.post("/add", async (req, res) => {
@@ -30,7 +30,7 @@ router.post("/add", async (req, res) => {
       category: result,
     });
   } catch (error) {
-    res.status(201).json({ success: false, error: error.toString() });
+    res.status(201).json({ success: false, message: error.toString() });
   }
 });
 router.post("/update", async (req, res) => {
@@ -50,7 +50,7 @@ router.post("/update", async (req, res) => {
       category: category,
     });
   } catch (error) {
-    res.status(201).json({ success: false, error: error.toString() });
+    res.status(201).json({ success: false, message: error.toString() });
   }
 });
 module.exports = router;

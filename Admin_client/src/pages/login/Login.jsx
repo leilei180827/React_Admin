@@ -3,21 +3,24 @@ import "./login.less";
 import logo from "../../assets/img/logo.png";
 import { Form, Input, Button, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { connect } from "react-redux";
 // import { login } from "../../network/login";
-import axios from "axios";
-import { login } from "../../network/login";
-export default function Login(props) {
+import { login_network } from "../../network/login";
+function Login(props) {
   const onFinish = (values) => {
-    login(values)
-      // axios
-      //   .post(`/login`, values)
-      // login_post(values)
+    login_network(values)
       .then(({ data }) => {
-        data.success
-          ? props.history.replace("/admin")
-          : message.error(data.message);
+        if (data.success) {
+          props.login_reducer({
+            token: data.token,
+            username: data.user.username,
+          });
+          props.history.replace("/admin");
+        } else {
+          message.error(data.message);
+        }
       })
-      .catch((error) => message.error(error));
+      .catch((error) => message.error(error.toString()));
   };
   const rules = [
     {
@@ -69,3 +72,9 @@ export default function Login(props) {
     </div>
   );
 }
+const mapDispatchToProps = (dispatch) => {
+  return {
+    login_reducer: (user) => dispatch({ type: "LOGIN", payload: user }),
+  };
+};
+export default connect(null, mapDispatchToProps)(Login);
