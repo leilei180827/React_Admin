@@ -5,3 +5,17 @@ export function getCategory(params) {
     params,
   });
 }
+export function addCategoryAPI(data) {
+  return request({
+    url: "/category/add",
+    method: "POST",
+    data,
+  });
+}
+export function updateCategoryAPI(data) {
+  return request({
+    url: "/category/update",
+    method: "POST",
+    data,
+  });
+}

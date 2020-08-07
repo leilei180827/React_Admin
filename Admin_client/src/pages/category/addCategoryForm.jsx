@@ -15,30 +15,41 @@ import {
   Checkbox,
   Row,
   Col,
+  message,
 } from "antd";
 import { CATEGORY_ROOT_ID } from "../../utils/constants";
+import { addCategoryAPI } from "../../network/category";
 const { Option } = Select;
-const { Paragraph } = Typography;
 export default function AddCategoryForm(props) {
   const formRef = React.useRef();
   const addCategory = () => {
-    console.log("access to Api");
-    console.log(formRef.current.getFieldValue());
+    let values = formRef.current.getFieldValue();
+    console.log(values);
+    addCategoryAPI(values)
+      .then(({ data }) => {
+        console.log(data);
+        data.success &&
+          props.currentParentId === values.parentId &&
+          props.updateCategories(data.category);
+        props.closeModal();
+      })
+      .catch((error) => {
+        message.error(error);
+        props.closeModal();
+      });
   };
-  const handleCancel = () => {
-    props.closeModal();
-  };
+
   return (
     <Modal
       title="Add New Category"
       visible={props.visible}
       onOk={addCategory}
-      onCancel={handleCancel}
+      onCancel={() => props.closeModal()}
     >
       <Form
         ref={formRef}
         initialValues={{
-          ["parent-category-name"]: CATEGORY_ROOT_ID,
+          ["parentId"]: CATEGORY_ROOT_ID,
         }}
       >
         <label>Belongs to:</label>
@@ -53,7 +64,7 @@ export default function AddCategoryForm(props) {
           </Select>
         </Form.Item>
         <label>Name:</label>
-        <Form.Item name="category-name">
+        <Form.Item name="name">
           <Input placeholder="Enter a Name" />
         </Form.Item>
       </Form>

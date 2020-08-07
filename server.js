@@ -55,6 +55,10 @@ app.listen(port, () => {
     CONNECT TO MONGODB SERVER
 ==========================*/
 mongoose
-  .connect(mongo_config, { useUnifiedTopology: true, useNewUrlParser: true })
+  .connect(mongo_config, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useFindAndModify: false,
+  })
   .then(() => console.log("mongoDB connnection establised successfully"))
   .catch((err) => console.log("Error: " + err));

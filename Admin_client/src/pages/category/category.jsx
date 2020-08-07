@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import LinkButton from "../../components/link_button/link_button";
 import { CATEGORY_ROOT_ID } from "../../utils/constants";
 import AddCategoryForm from "./addCategoryForm";
+import EditCategoryForm from "./editCategoryForm";
 
 function Category(props) {
   const [categories, setCategories] = useState([]);
@@ -20,18 +21,11 @@ function Category(props) {
   const [subCategoryName, setSubCategoryName] = useState("");
   const [addCategoryModal, setAddCategoryModal] = useState(false);
   const [editCategoryModal, setEditCategoryModal] = useState(false);
-  const addCategoryRef = React.useRef();
+  const [editCategory, setEditCategory] = useState("");
 
-  //Modal related methods
-  const showAddCategoryModal = () => {
-    setAddCategoryModal(true);
-  };
-  const showEditCategoryModal = () => {
-    setEditCategoryModal(true);
-  };
   const handleCancel = () => {
     setAddCategoryModal(false);
-    setEditCategoryModal(false);
+    setEditCategory("");
   };
   //get categories
   useEffect(() => {
@@ -53,7 +47,13 @@ function Category(props) {
     setSubCategoryName(category.name);
     setParentId(category._id);
   };
-
+  //Modal related methods
+  const showAddCategoryModal = () => {
+    setAddCategoryModal(true);
+  };
+  const showEditCategoryModal = (category) => {
+    setEditCategory(category);
+  };
   //add new category
   const cardHeaderExtra = (
     <Button type="primary" onClick={showAddCategoryModal}>
@@ -109,14 +109,21 @@ function Category(props) {
       render: (category) => tableHeaderActions(category),
     },
   ];
-  //add category access to API
-  const addCategory = (e) => {
-    console.log(e);
-    console.log("addCategory");
-  };
-  //edit category access to API
-  const editCategory = (e) => {
-    console.log("editCategory");
+  const updateCategories = (data) => {
+    let newCategories;
+    parentId === CATEGORY_ROOT_ID
+      ? (newCategories = [...categories])
+      : (newCategories = [...subCategories]);
+    let isExisted = newCategories.find((item) => item._id === data._id);
+    if (isExisted) {
+      newCategories[newCategories.indexOf(isExisted)] = data;
+    } else {
+      newCategories.push(data);
+    }
+
+    parentId === CATEGORY_ROOT_ID
+      ? setCategories(newCategories)
+      : setSubCategories(newCategories);
   };
   return (
     <>
@@ -128,24 +135,23 @@ function Category(props) {
             parentId === CATEGORY_ROOT_ID ? categories : subCategories
           }
           rowKey={(record) => record._id}
-          pagination={{ position: ["bottomCenter"] }}
+          pagination={{ position: ["bottomCenter"], pageSize: 5 }}
         />
       </Card>
       <AddCategoryForm
         selectOptions={categories}
         closeModal={handleCancel}
+        updateCategories={updateCategories}
         visible={addCategoryModal}
+        //currentParentId decides to update page or not
+        currentParentId={parentId}
       />
-      <Modal
-        title="Edit Category"
-        visible={editCategoryModal}
-        onOk={editCategory}
-        onCancel={handleCancel}
-      >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-      </Modal>
+      <EditCategoryForm
+        closeModal={handleCancel}
+        updateCategories={updateCategories}
+        visible={editCategory}
+        category={editCategory}
+      />
     </>
   );
 }
