@@ -2,9 +2,10 @@ import axios from "axios";
 export function request(option) {
   const instance = axios.create({
     timeout: 10000,
-    headers: {
-      "Content-Type": "application/json",
-    },
+    // headers: {
+    //   "Content-Type": "application/json",
+    // },
+    // baseURL: "/",
   });
 
   //  intercept axios request in order to apply rules like token/loading icon for requests

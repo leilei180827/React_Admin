@@ -18,6 +18,7 @@ const port = process.env.PORT || 5000;
 const login_route = require("./routes/login");
 const register_route = require("./routes/register");
 const category_route = require("./routes/category");
+const upload_route = require("./routes/upload");
 
 /* =======================
     EXPRESS CONFIGURATION
@@ -29,6 +30,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 app.use(isAuth);
+app.use(express.static(__dirname + "/public"));
+// app.use(express.static('public'));
 // print the request log on console
 // app.use(morgan("dev"));
 
@@ -37,7 +40,8 @@ app.use(isAuth);
 // configure api router
 app.use("/login", login_route);
 app.use("/register", register_route);
-app.use("/category", category_route);
+app.use("/admin/category", category_route);
+app.use("/admin/upload", upload_route);
 // app.use("/product", product_route);
 // index page, just for testing
 app.get("/", (req, res) => {

@@ -1,21 +1,22 @@
 import { request } from "./request.js";
 export function getCategory(params) {
   return request({
-    url: "/category",
+    url: "/admin/category",
     params,
   });
 }
 export function addCategoryAPI(data) {
   return request({
-    url: "/category/add",
+    url: "/admin/category/add",
     method: "POST",
     data,
   });
 }
 export function updateCategoryAPI(data) {
   return request({
-    url: "/category/update",
+    url: "/admin/category/update",
     method: "POST",
     data,
   });
 }
+

@@ -42,7 +42,7 @@ export default function Admin(props) {
     });
   };
   return (
-    <Layout style={{ minHeight: "100vh" }}>
+    <Layout style={{ minHeight: "100%" }}>
       <Sider
         collapsible
         collapsed={collapsed}

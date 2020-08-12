@@ -17,16 +17,19 @@ function AdminHeader(props) {
   const logout = () => {
     props.history.replace("/login");
   };
+
   return (
     <div className="admin-header">
       <div className="admin-header-top">
-        <span>Welcome</span>
+        <span>Welcome</span> 
         <span>{props.user.username}</span>
         <LinkButton onClick={logout}>Logout</LinkButton>
       </div>
       <div className="admin-header-bottom">
         <span className="title">
-          {props.location.pathname.replace("/", "")}
+          {props.location.pathname === "/"
+            ? "home"
+            : props.location.pathname.split("/")[1]}
         </span>
         <span className="clock">
           {formatDate(clock, "yyyy-MM-dd hh-mm-ss")}

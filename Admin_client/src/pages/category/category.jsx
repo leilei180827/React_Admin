@@ -20,17 +20,12 @@ function Category(props) {
   const [parentId, setParentId] = useState(CATEGORY_ROOT_ID);
   const [subCategoryName, setSubCategoryName] = useState("");
   const [addCategoryModal, setAddCategoryModal] = useState(false);
-  const [editCategoryModal, setEditCategoryModal] = useState(false);
   const [editCategory, setEditCategory] = useState("");
-
-  const handleCancel = () => {
-    setAddCategoryModal(false);
-    setEditCategory("");
-  };
   //get categories
   useEffect(() => {
     handleGetCategory(parentId);
   }, [parentId]);
+
   const handleGetCategory = (parentId) => {
     getCategory({
       parentId: parentId,
@@ -54,6 +49,27 @@ function Category(props) {
   const showEditCategoryModal = (category) => {
     setEditCategory(category);
   };
+  const handleCancel = () => {
+    setAddCategoryModal(false);
+    setEditCategory("");
+  };
+  const updateCategories = (data) => {
+    let newCategories;
+    parentId === CATEGORY_ROOT_ID
+      ? (newCategories = [...categories])
+      : (newCategories = [...subCategories]);
+    let isExisted = newCategories.find((item) => item._id === data._id);
+    if (isExisted) {
+      newCategories[newCategories.indexOf(isExisted)] = data;
+    } else {
+      newCategories.push(data);
+    }
+
+    parentId === CATEGORY_ROOT_ID
+      ? setCategories(newCategories)
+      : setSubCategories(newCategories);
+  };
+  
   //add new category
   const cardHeaderExtra = (
     <Button type="primary" onClick={showAddCategoryModal}>
@@ -109,22 +125,7 @@ function Category(props) {
       render: (category) => tableHeaderActions(category),
     },
   ];
-  const updateCategories = (data) => {
-    let newCategories;
-    parentId === CATEGORY_ROOT_ID
-      ? (newCategories = [...categories])
-      : (newCategories = [...subCategories]);
-    let isExisted = newCategories.find((item) => item._id === data._id);
-    if (isExisted) {
-      newCategories[newCategories.indexOf(isExisted)] = data;
-    } else {
-      newCategories.push(data);
-    }
 
-    parentId === CATEGORY_ROOT_ID
-      ? setCategories(newCategories)
-      : setSubCategories(newCategories);
-  };
   return (
     <>
       <Card title={title} extra={cardHeaderExtra} className="category-content">
