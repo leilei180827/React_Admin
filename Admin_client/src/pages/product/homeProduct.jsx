@@ -1,8 +1,17 @@
-import React from "react";
-import { Card, Button, Input, Table } from "antd";
+import React, { useState, useEffect } from "react";
+import { Card, Button, Input, Table, message } from "antd";
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
+import { getProductAPI } from "../../network/product";
 import LinkButton from "../../components/link_button/link_button";
 export default function HomeProduct(props) {
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    getProductAPI()
+      .then(({ data }) =>
+        data.success ? setProducts(data.products) : message.error(data.message)
+      )
+      .catch((error) => message.error(error.toString()));
+  }, []);
   const title = (
     <div className="search">
       <Input style={{ width: "300px" }} placeholder="Search" />
@@ -11,6 +20,9 @@ export default function HomeProduct(props) {
   );
   const addProduct = () => {
     props.history.push("/product/update");
+  };
+  const showProductDetail = (item) => {
+    props.history.push({ pathname: "/product/detail", product: item });
   };
   //add new product
   const cardHeaderExtra = (
@@ -22,13 +34,14 @@ export default function HomeProduct(props) {
 
   const columns = [
     { title: "Name", dataIndex: "name", key: "name" },
-    { title: "Description", dataIndex: "description", key: "description" },
+    { title: "Keywords", dataIndex: "keywords", key: "keywords" },
     {
       title: "Price",
       dataIndex: "price",
       key: "price",
       render: (price) => <span>${price}</span>,
     },
+    { title: "Inventory", dataIndex: "inventory", key: "inventory" },
     {
       title: "Status",
       dataIndex: "status",
@@ -43,7 +56,9 @@ export default function HomeProduct(props) {
       key: "x",
       render: (record) => (
         <span>
-          <Button type="primary">detail</Button>
+          <Button type="primary" onClick={() => showProductDetail(record)}>
+            detail
+          </Button>
           <Button type="primary" style={{ margin: "2px 5px" }}>
             edit
           </Button>
@@ -54,21 +69,12 @@ export default function HomeProduct(props) {
       ),
     },
   ];
-  const data = [
-    {
-      key: 1,
-      name: "Lenovo ThinkPad",
-      description:
-        "recently released X390 T490, thin body and fashion leading design",
-      price: 660,
-      status: 0,
-    },
-  ];
   return (
     <Card title={title} bordered={false} extra={cardHeaderExtra}>
       <Table
         columns={columns}
-        dataSource={data}
+        dataSource={products}
+        rowKey={(record) => record._id}
         pagination={{ position: ["bottomCenter"], pageSize: 5 }}
         bordered
       />

@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import HomeProduct from "./homeProduct";
 import DetailProduct from "./detailProduct";
 import EditAddProduct from "./editAddProduct";
+import "./product.less";
 
 export default function Product() {
   return (

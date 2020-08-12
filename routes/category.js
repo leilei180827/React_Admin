@@ -43,6 +43,25 @@ router.post("/update", async (req, res) => {
     res.status(201).json({ success: false, message: error.toString() });
   }
 });
+router.get("/info", async (req, res) => {
+  try {
+    if (!req.isAuth) {
+      throw new Error("Unauthorized, please login first");
+    }
+    let category = await Category.findById(req.query.id);
+    if (category) {
+      res.status(200).json({
+        success: true,
+        category: category,
+        message: "successfully found",
+      });
+    } else {
+      throw new Error("Not Found");
+    }
+  } catch (error) {
+    res.status(201).json({ success: false, message: error.toString() });
+  }
+});
 router.get("/", async (req, res) => {
   try {
     if (!req.isAuth) {
@@ -57,4 +76,5 @@ router.get("/", async (req, res) => {
     res.status(201).json({ success: false, message: error.toString() });
   }
 });
+
 module.exports = router;

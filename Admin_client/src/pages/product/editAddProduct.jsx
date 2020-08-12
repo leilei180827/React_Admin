@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   Card,
-  List,
   Cascader,
   Input,
   Button,
@@ -9,21 +8,24 @@ import {
   InputNumber,
   message,
 } from "antd";
-import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 import { getCategory } from "../../network/category";
+import { addOrUpdateProductAPI } from "../../network/product";
 import { CATEGORY_ROOT_ID } from "../../utils/constants";
 import PictureWall from "../../components/picture_wall/pricture_wall";
 import RichTextEditor from "../../components/rich_text_editor/rich_text_editor";
 const { TextArea } = Input;
-export default function EditAddProduct() {
+export default function EditAddProduct(props) {
   const [cascaderOptions, setCascaderOptions] = useState([]);
   const uploadCompRef = React.useRef(null);
   const richTextEditorCompRef = React.useRef(null);
-  const [images, setImages] = useState([]);
+  const goBack = () => {
+    props.history.go(-1);
+  };
   const title = (
     <div>
-      <ArrowLeftOutlined style={{ color: "#1DA57A" }} />
-      <span style={{ marginLeft: "10px" }}>Details</span>
+      <ArrowLeftOutlined onClick={goBack} style={{ color: "#1DA57A" }} />
+      <span style={{ marginLeft: "10px" }}>Add</span>
     </div>
   );
   const layout = {
@@ -34,9 +36,26 @@ export default function EditAddProduct() {
     wrapperCol: { offset: 2, span: 8 },
   };
   const onFinish = (values) => {
-    console.log("Success:", values);
-    console.log(uploadCompRef.current.getUploadImages());
-    console.log(richTextEditorCompRef.current.getRichTextEditor());
+    let pCategory =
+      values.category.length === 2 ? values.category[0] : CATEGORY_ROOT_ID;
+    let category =
+      values.category.length === 2 ? values.category[1] : values.category[0];
+    let product = {
+      name: values.name,
+      keywords: values.keywords,
+      price: values.price,
+      inventory: values.inventory,
+      pCategory,
+      category,
+      images: uploadCompRef.current.getUploadImages(),
+      description: richTextEditorCompRef.current.getRichTextEditor(),
+    };
+    addOrUpdateProductAPI(product)
+      .then(({ data }) => {
+        data.success && message.success("successfully submitted");
+        !data.success && message.error(data.message);
+      })
+      .catch((error) => message.error(error.toString()));
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -70,7 +89,7 @@ export default function EditAddProduct() {
     const targetOption = selectedOptions[0];
     targetOption.loading = true;
     // load options lazily
-    getCategory({ parentId: targetOption.id })
+    getCategory({ parentId: targetOption.value })
       .then(({ data }) => {
         targetOption.loading = false;
         if (!data.success) {
@@ -93,9 +112,6 @@ export default function EditAddProduct() {
       })
       .catch((error) => message.error(error.toString()));
   };
-  const collectUploadImages = (uploadedImages) => {
-    setImages(uploadedImages);
-  };
   return (
     <Card title={title}>
       <Form
@@ -113,10 +129,10 @@ export default function EditAddProduct() {
         </Form.Item>
 
         <Form.Item
-          label="Description"
-          name="desc"
+          label="Keywords"
+          name="keywords"
           rules={[
-            { required: true, message: "Please input your description!" },
+            { required: true, message: "Please input a short description!" },
           ]}
         >
           <TextArea autoSize={{ minRows: 2, maxRows: 6 }} />
@@ -127,7 +143,7 @@ export default function EditAddProduct() {
           rules={[
             {
               required: true,
-              message: "Please input a valid price description!",
+              message: "Please input a valid price!",
             },
           ]}
         >
@@ -138,6 +154,13 @@ export default function EditAddProduct() {
             parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
             min={1}
           />
+        </Form.Item>
+        <Form.Item
+          label="Inventory"
+          name="inventory"
+          rules={[{ required: true, message: "Please input a valid number!" }]}
+        >
+          <InputNumber min={0} />
         </Form.Item>
         <Form.Item
           label="Category"

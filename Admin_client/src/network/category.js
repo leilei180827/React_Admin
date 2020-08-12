@@ -19,4 +19,9 @@ export function updateCategoryAPI(data) {
     data,
   });
 }
-
+export function getCategoryInfoAPI(params) {
+  return request({
+    url: "/admin/category/info",
+    params,
+  });
+}
