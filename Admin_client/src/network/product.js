@@ -1,8 +1,6 @@
 import { request } from "./request.js";
 export function addOrUpdateProductAPI(data) {
-  console.log(data._id);
-  let url = data._id ? "/admin/product/update" : "/admin/product/add";
-  console.log(url);
+  let url = !!data.id ? "/admin/product/update" : "/admin/product/add";
   return request({
     url,
     method: "POST",
@@ -12,6 +10,12 @@ export function addOrUpdateProductAPI(data) {
 export function getProductAPI(params) {
   return request({
     url: "/admin/product/",
+    params,
+  });
+}
+export function searchProductAPI(params) {
+  return request({
+    url: "/admin/product/search",
     params,
   });
 }

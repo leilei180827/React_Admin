@@ -16,6 +16,16 @@ import PictureWall from "../../components/picture_wall/pricture_wall";
 import RichTextEditor from "../../components/rich_text_editor/rich_text_editor";
 const { TextArea } = Input;
 export default function EditAddProduct(props) {
+  const product = props.location.product || {};
+  const categoryIds = [];
+  if (Object.keys(product).length !== 0) {
+    if (product.pCategory === CATEGORY_ROOT_ID) {
+      categoryIds.push(product.category);
+    } else {
+      categoryIds.push(product.pCategory);
+      categoryIds.push(product.category);
+    }
+  }
   const [cascaderOptions, setCascaderOptions] = useState([]);
   const uploadCompRef = React.useRef(null);
   const richTextEditorCompRef = React.useRef(null);
@@ -25,7 +35,9 @@ export default function EditAddProduct(props) {
   const title = (
     <div>
       <ArrowLeftOutlined onClick={goBack} style={{ color: "#1DA57A" }} />
-      <span style={{ marginLeft: "10px" }}>Add</span>
+      <span style={{ marginLeft: "10px" }}>
+        {Object.keys(product).length !== 0 ? "Edit" : "Add"}
+      </span>
     </div>
   );
   const layout = {
@@ -36,11 +48,13 @@ export default function EditAddProduct(props) {
     wrapperCol: { offset: 2, span: 8 },
   };
   const onFinish = (values) => {
+    console.log(values);
+    console.log(product);
     let pCategory =
       values.category.length === 2 ? values.category[0] : CATEGORY_ROOT_ID;
     let category =
       values.category.length === 2 ? values.category[1] : values.category[0];
-    let product = {
+    let newProduct = {
       name: values.name,
       keywords: values.keywords,
       price: values.price,
@@ -50,14 +64,36 @@ export default function EditAddProduct(props) {
       images: uploadCompRef.current.getUploadImages(),
       description: richTextEditorCompRef.current.getRichTextEditor(),
     };
-    addOrUpdateProductAPI(product)
+    //only update items user has changed
+    if (Object.keys(product).length !== 0) {
+      newProduct = collectChangedItems(product, newProduct);
+      Object.keys(newProduct).length !== 0 && (newProduct.id = product._id);
+    }
+    //submit without items needed to be updated
+    if (Object.keys(newProduct).length === 0) {
+      message.success("successfully submitted");
+      return;
+    }
+    addOrUpdateProductAPI(newProduct)
       .then(({ data }) => {
+        console.log(data);
         data.success && message.success("successfully submitted");
         !data.success && message.error(data.message);
       })
       .catch((error) => message.error(error.toString()));
   };
-
+  //find changed items
+  const collectChangedItems = (productOrigin, productNew) => {
+    let result = {};
+    for (let key in productNew) {
+      if (productNew[key] === productOrigin[key]) {
+        continue;
+      } else {
+        result[key] = productNew[key];
+      }
+    }
+    return result;
+  };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
@@ -65,28 +101,46 @@ export default function EditAddProduct(props) {
   useEffect(() => {
     prepareCascade();
   }, []);
-  const prepareCascade = () => {
-    getCategory({ parentId: CATEGORY_ROOT_ID })
-      .then(({ data }) => {
-        if (!data.success) {
-          message.error(data.message);
-          return;
-        }
-        let options = [];
-        data.success &&
-          data.categories.map((item) => {
-            options.push({
-              value: item._id,
-              label: item.name,
-              isLeaf: false,
-            });
-          });
-        setCascaderOptions(options);
-      })
-      .catch((error) => message.error(error.toString()));
+  const prepareCascade = async () => {
+    let options = [];
+    const { data } = await getCategory({ parentId: CATEGORY_ROOT_ID });
+    if (data.success && data.categories.length !== 0) {
+      data.categories.map((item) => {
+        options.push({
+          value: item._id,
+          label: item.name,
+          isLeaf: false,
+        });
+      });
+    }
+    if (
+      Object.keys(product).length !== 0 &&
+      product.pCategory !== CATEGORY_ROOT_ID
+    ) {
+      console.log(product.pCategory);
+      let children = [];
+      const childrenResult = await getCategory({
+        parentId: product.pCategory,
+      });
+      childrenResult.data.categories.map((item) =>
+        children.push({
+          value: item._id,
+          label: item.name,
+          isLeaf: true,
+        })
+      );
+      children.length !== 0 &&
+        (options.find(
+          (item) => item.value === product.pCategory
+        ).children = children);
+    }
+    setCascaderOptions(options);
   };
   const cascaderLoadData = (selectedOptions) => {
     const targetOption = selectedOptions[0];
+    if (targetOption.children && targetOption.children.length !== 0) {
+      return;
+    }
     targetOption.loading = true;
     // load options lazily
     getCategory({ parentId: targetOption.value })
@@ -116,7 +170,13 @@ export default function EditAddProduct(props) {
     <Card title={title}>
       <Form
         {...layout}
-        initialValues={{ name: "", desc: "" }}
+        initialValues={{
+          name: product.name || null,
+          keywords: product.keywords || null,
+          price: product.price || null,
+          inventory: product.inventory || null,
+          category: categoryIds.length === 0 ? null : categoryIds,
+        }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
       >
@@ -176,7 +236,7 @@ export default function EditAddProduct(props) {
           <Cascader options={cascaderOptions} loadData={cascaderLoadData} />
         </Form.Item>
         <Form.Item label="Images" name="image">
-          <PictureWall ref={uploadCompRef} />
+          <PictureWall ref={uploadCompRef} images={product.images} />
         </Form.Item>
         <Form.Item
           label="Description"
@@ -184,7 +244,10 @@ export default function EditAddProduct(props) {
           labelCol={{ span: 2 }}
           wrapperCol={{ span: 16 }}
         >
-          <RichTextEditor ref={richTextEditorCompRef} />
+          <RichTextEditor
+            ref={richTextEditorCompRef}
+            description={product.description}
+          />
         </Form.Item>
 
         <Form.Item {...tailLayout}>
