@@ -33,7 +33,6 @@ router.post("/update", async (req, res) => {
       },
       { new: true }
     );
-    console.log(category);
     res.status(200).json({
       success: true,
       message: "update successfully",

@@ -19,7 +19,8 @@ const login_route = require("./routes/login");
 const register_route = require("./routes/register");
 const category_route = require("./routes/category");
 const upload_route = require("./routes/upload");
-const product_route = require("./routes/product")
+const product_route = require("./routes/product");
+const role_route = require("./routes/role");
 
 /* =======================
     EXPRESS CONFIGURATION
@@ -44,6 +45,7 @@ app.use("/register", register_route);
 app.use("/admin/category", category_route);
 app.use("/admin/upload", upload_route);
 app.use("/admin/product", product_route);
+app.use("/admin/role", role_route);
 // app.use("/product", product_route);
 // index page, just for testing
 app.get("/", (req, res) => {
