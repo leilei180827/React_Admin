@@ -1,4 +1,7 @@
 export function formatDate(dateInNumber, fmt) {
+  if (!dateInNumber) {
+    return null;
+  }
   let date = new Date(dateInNumber);
   if (/(y+)/.test(fmt)) {
     fmt = fmt.replace(

@@ -19,7 +19,7 @@ export default function Role() {
         className="role-title-create"
         onClick={() => setCreateModalVisible(true)}
       >
-        create role
+        add role
       </Button>
       <Button
         type="primary"
@@ -40,18 +40,18 @@ export default function Role() {
     {
       title: "Create Time",
       dataIndex: "createdAt",
-      render: (time) => formatDate(time, "yyyy-MM-dd hh-mm-ss"),
+      render: (time) => formatDate(time, "yyyy-MM-dd hh:mm:ss"),
     },
     {
       title: "Authority Time",
       dataIndex: "auth_time",
+      render: (time) => formatDate(time, "yyyy-MM-dd hh:mm:ss"),
     },
     { title: "Authorizer", dataIndex: "authorizer" },
   ];
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
-      setPermissionDisabled(!permissionDisabled);
-      selectedRows[0].menus = ["/home", "/product"];
+      permissionDisabled && setPermissionDisabled(false);
       setSelectedRow(selectedRows[0]);
     },
     getCheckboxProps: (record) => ({
@@ -70,6 +70,7 @@ export default function Role() {
       })
       .catch((error) => message.error(error.toString()));
   };
+  //create a role
   const createModalHandleOK = () => {
     if (!roleName) {
       message.error("you must name it");
@@ -86,9 +87,15 @@ export default function Role() {
       .catch((error) => message.error(error.toString()));
     setCreateModalVisible(false);
   };
-  const permissionModalHandleOK = () => {
-    console.log("permisionss");
+  //update page by updating state roles
+  const permissionModalHandleOK = (updatedRole) => {
+    let temp = [...roles];
+    let updated = temp.map((item) =>
+      item._id === updatedRole._id ? updatedRole : item
+    );
+    setRoles(updated);
     setPermissionModalVisible(false);
+    message.success("successfully update");
   };
   const modalHandleCancel = () => {
     setPermissionModalVisible(false);

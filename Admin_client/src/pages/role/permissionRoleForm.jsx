@@ -1,5 +1,5 @@
-import React, { useState, useRef } from "react";
-import { Modal, Input, Form, TreeSelect } from "antd";
+import React, { useState } from "react";
+import { Modal, Input, Form, TreeSelect, message } from "antd";
 import menus from "../../config/menus";
 import { updateRoleAPI } from "../../network/role";
 import { connect } from "react-redux";
@@ -29,23 +29,16 @@ function PermissionRoleForm(props) {
     });
   };
   const updateRole = () => {
-    // props.row._id;
-    // try {
-    //   let { data } = await updateRoleAPI({
-    //     id: props.row._id,
-    //     menus: selectedRights,
-    //   });
-    // } catch (error) {
-    //   console.log(error);
-    // }
     updateRoleAPI({
       id: props.row._id,
       menus: selectedRights,
       auth_time: Date.now(),
       authorizer: props.user.username,
     })
-      .then(({ data }) => console.log(data))
-      .catch((error) => console.log(error));
+      .then(({ data }) =>
+        data.success ? props.handleOK(data.role) : message.error(data.message)
+      )
+      .catch((error) => message.error(error.toString()));
   };
   // props.handleOK;
   return (
@@ -81,7 +74,4 @@ function PermissionRoleForm(props) {
 const mapStateToProps = (state) => ({
   user: state.user,
 });
-// const mapStateToProps = (state) => ({
-//   user: state.user,
-// });
 export default connect(mapStateToProps, null)(PermissionRoleForm);

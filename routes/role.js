@@ -24,33 +24,36 @@ router.post("/add", async (req, res) => {
   }
 });
 router.post("/update", async (req, res) => {
-    try {
-      if (!req.isAuth) {
-        throw new Error("Unauthorized, please login first");
-      }
-      let id = req.body.id;
-      let updateRange = req.body;
-      delete updateRange.id;
-      let role = await Role.findByIdAndUpdate(
-        id,
-        {
-          $set: updateRange,
-        },
-        { new: true }
-      );
-      if (role) {
-        res.status(200).json({
-          success: true,
-          message: "update successfully",
-          role: role,
-        });
-      } else {
-        throw new Error("update fails");
-      }
-    } catch (error) {
-      res.status(201).json({ success: false, message: error.toString() });
+  try {
+    if (!req.isAuth) {
+      throw new Error("Unauthorized, please login first");
     }
-  });
+    let id = req.body.id;
+    let updateRange = req.body;
+    delete updateRange.id;
+    // if (updateRange.auth_time) {
+    //   updateRange.auth_time = new Date(updateRange.auth_time);
+    // }
+    let role = await Role.findByIdAndUpdate(
+      id,
+      {
+        $set: updateRange,
+      },
+      { new: true }
+    );
+    if (role) {
+      res.status(200).json({
+        success: true,
+        message: "update successfully",
+        role: role,
+      });
+    } else {
+      throw new Error("update fails");
+    }
+  } catch (error) {
+    res.status(201).json({ success: false, message: error.toString() });
+  }
+});
 router.get("/", async (req, res) => {
   try {
     if (!req.isAuth) {
@@ -64,7 +67,7 @@ router.get("/", async (req, res) => {
         roles: results,
       });
     } else {
-      throw new Error("unfortunately the operation fails, please try again");
+      throw new Error("unfortunately it fails, please try again");
     }
   } catch (error) {
     res.status(201).json({ success: false, message: error.toString() });

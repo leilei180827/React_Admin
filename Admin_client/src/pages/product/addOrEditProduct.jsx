@@ -15,7 +15,7 @@ import { CATEGORY_ROOT_ID } from "../../utils/constants";
 import PictureWall from "../../components/picture_wall/pricture_wall";
 import RichTextEditor from "../../components/rich_text_editor/rich_text_editor";
 const { TextArea } = Input;
-export default function EditAddProduct(props) {
+export default function AddOrEditProduct(props) {
   const product = props.location.product || {};
   const categoryIds = [];
   if (Object.keys(product).length !== 0) {

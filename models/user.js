@@ -5,18 +5,21 @@ const User = new Schema(
     username: {
       type: String,
       required: true,
+      unique: true,
     },
     password: {
       type: String,
       required: true,
     },
-    roleId: {
-      type: Number,
-      default: 1,
+    role: {
+      type: String,
+      default: "visitor",
     },
     portrait: {
       type: String,
     },
+    phone_number: String,
+    email: String,
   },
   {
     timestamps: true,
