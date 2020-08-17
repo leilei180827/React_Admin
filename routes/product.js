@@ -5,7 +5,6 @@ router.post("/add", async (req, res) => {
     if (!req.isAuth) {
       throw new Error("Unauthorized, please login first");
     }
-    console.log(req.body);
     let newProduct = new Product(req.body);
     let result = await newProduct.save();
     res.status(200).json({
@@ -52,13 +51,14 @@ router.get("/search", async (req, res) => {
       throw new Error("Unauthorized, please login first");
     }
     let keyword = req.query.q;
-    let filter={
-    $or: [  // multiple
-      {name: {$regex: keyword}},
-      {keywords: {$regex: keyword, $options: '$i'}}, //  $options: '$i' ignore uppercase/lowercase
-      {description: {$regex: keyword, $options: '$i'}}
-    ]
-  }
+    let filter = {
+      $or: [
+        // multiple
+        { name: { $regex: keyword } },
+        { keywords: { $regex: keyword, $options: "$i" } }, //  $options: '$i' ignore uppercase/lowercase
+        { description: { $regex: keyword, $options: "$i" } },
+      ],
+    };
     let products = await Product.find(filter);
     res.status(200).json({
       success: true,

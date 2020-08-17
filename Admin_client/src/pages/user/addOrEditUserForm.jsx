@@ -11,26 +11,61 @@ import {
   Space,
 } from "antd";
 import { getRolesAPI } from "../../network/role";
+import { addUserAPI, editUserAPI } from "../../network/user";
 const { Option } = Select;
 export default function AddOrEditUserForm(props) {
   const [form] = Form.useForm();
   const [rolesOptions, setRolesOptions] = useState([]);
-  const title = !!props.user ? "Edit" : "Add";
+  const user = props.user || {};
+  const title = Object.keys(props.user).length !== 0 ? "Edit" : "Add";
   const layout = {
-    labelCol: { span: 4 },
+    labelCol: { span: Object.keys(props.user).length !== 0 ? 6 : 4 },
     wrapperCol: { span: 16 },
   };
   const handleOK = async () => {
     try {
       const values = await form.validateFields();
-      console.log("Success:", values);
+      let result;
+      //it's e adding
+      if (Object.keys(props.user).length === 0) {
+        result = await addUserAPI(values);
+        result.data.success &&
+          message.success(result.data.message) &&
+          props.updateUsers(result.data.user, "add");
+      }
+      // editing
+      else {
+        for (let key in values) {
+          values[key] === props.user[key] && delete values[key];
+        }
+        //something changed then update
+        if (Object.keys(values).length !== 0) {
+          values.id = props.user._id;
+        }
+        result = await editUserAPI(values);
+        result.data.success &&
+          message.success(result.data.message) &&
+          props.updateUsers(result.data.user, "edit");
+      }
+      !result.data.success && message.error(result.data.message);
+      props.handleCancel();
     } catch (errorInfo) {
-      console.log("Failed:", errorInfo);
+      message.error(errorInfo.toString());
+      props.handleCancel();
     }
   };
   useEffect(() => {
     initialSelectOptions();
   }, []);
+  useEffect(() => {
+    form.setFieldsValue({
+      username: user.username || null,
+      password: user.password || null,
+      phone_number: user.phone_number || null,
+      email: user.email || null,
+      role: user.role || null,
+    });
+  }, [user]);
   const initialSelectOptions = () => {
     getRolesAPI()
       .then(({ data }) => {
@@ -43,16 +78,13 @@ export default function AddOrEditUserForm(props) {
 
   return (
     <Modal
+      forceRender
       title={title}
       visible={props.visible}
       onOk={handleOK}
       onCancel={props.handleCancel}
     >
-      <Form
-        form={form}
-        {...layout}
-        // initialValues={{ remember: true }}
-      >
+      <Form form={form} {...layout}>
         <Form.Item
           label="Username"
           name="username"
@@ -60,14 +92,16 @@ export default function AddOrEditUserForm(props) {
         >
           <Input />
         </Form.Item>
+        {Object.keys(props.user).length === 0 && (
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[{ required: true, message: "Please input your password!" }]}
+          >
+            <Input.Password />
+          </Form.Item>
+        )}
 
-        <Form.Item
-          label="Password"
-          name="password"
-          rules={[{ required: true, message: "Please input your password!" }]}
-        >
-          <Input.Password />
-        </Form.Item>
         <Form.Item
           label="Phone"
           name="phone_number"
@@ -110,13 +144,9 @@ export default function AddOrEditUserForm(props) {
                 {item}
               </Option>
             ))}
-            {/* <Option value="jack">Jack</Option>
-            <Option value="lucy">Lucy</Option>
-            <Option value="tom">Tom</Option> */}
           </Select>
         </Form.Item>
       </Form>
     </Modal>
   );
 }
-// export default AddOrEditProduct

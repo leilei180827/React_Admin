@@ -32,4 +32,72 @@ router.post("/add", async (req, res) => {
     });
   }
 });
+router.post("/update", async (req, res) => {
+  try {
+    if (!req.isAuth) {
+      throw new Error("please login in first");
+    }
+    let id = req.body.id;
+    let updateRange = req.body;
+    delete updateRange.id;
+    let result = await User.findByIdAndUpdate(id, updateRange, {
+      new: true,
+    }).select("-password");
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: "successfully updated",
+        user: result,
+      });
+    } else {
+      throw new Error("unfortunately it fails, please try later");
+    }
+  } catch (error) {
+    res.status(201).json({
+      success: false,
+      message: error.toString(),
+    });
+  }
+});
+router.post("/delete", async (req, res) => {
+  try {
+    if (!req.isAuth) {
+      throw new Error("please login in first");
+    }
+    let result = await User.findByIdAndDelete(req.body.id).select("-password");
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: "successfully deleted",
+        user: result,
+      });
+    } else {
+      throw new Error("unfortunately it fails, please try later");
+    }
+  } catch (error) {
+    res.status(201).json({
+      success: false,
+      message: error.toString(),
+    });
+  }
+});
+router.get("/", async (req, res) => {
+  try {
+    if (!req.isAuth) {
+      throw new Error("Unauthorized, please login first");
+    }
+    let results = await User.find().select("-password");
+    if (results) {
+      res.status(200).json({
+        success: true,
+        message: "successfully found",
+        users: results,
+      });
+    } else {
+      throw new Error("unfortunately it fails, please try again");
+    }
+  } catch (error) {
+    res.status(201).json({ success: false, message: error.toString() });
+  }
+});
 module.exports = router;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button, Input, Table, message } from "antd";
+import { Card, Button, Input, Table, message, Space } from "antd";
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import { getProductAPI } from "../../network/product";
 import { addOrUpdateProductAPI, searchProductAPI } from "../../network/product";
@@ -16,21 +16,26 @@ export default function HomeProduct(props) {
         } else {
           message.error(data.message);
         }
-        // console.log(data);
-        // data.success
-        //   ? setProducts(data.products) && setFilterProducts(data.products)
-        //   : message.error(data.message);
       })
       .catch((error) => message.error(error.toString()));
   }, []);
   const title = (
-    <Input.Search
-      placeholder="input search text"
-      enterButton="Search"
-      size="large"
-      onSearch={(value) => searchProducts(value)}
-      style={{ width: "300px" }}
-    />
+    <Space>
+      <Input.Search
+        placeholder="input search text"
+        enterButton="Search"
+        size="large"
+        onSearch={(value) => searchProducts(value)}
+        style={{ width: "300px" }}
+      />
+      <Button
+        size="large"
+        type="primary"
+        onClick={() => setFilterProducts(products)}
+      >
+        All
+      </Button>
+    </Space>
   );
   const searchProducts = (value) => {
     if (!value) {
