@@ -23,9 +23,7 @@ export default function DetailProduct(props) {
       <span style={{ marginLeft: "10px" }}>Detail</span>
     </div>
   );
-  useEffect(() => {
-    getCategoryNameByIds();
-  }, []);
+
   const getCategoryNameByIds = () => {
     if (!product) {
       return;
@@ -57,6 +55,9 @@ export default function DetailProduct(props) {
         .catch((error) => message.error(error.toString()));
     }
   };
+  useEffect(() => {
+    getCategoryNameByIds();
+  }, [getCategoryNameByIds]);
   // if(product){
   //   return ()
   // }else{

@@ -1,15 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Card,
-  Button,
-  Table,
-  Form,
-  Select,
-  Modal,
-  Input,
-  message,
-  Space,
-} from "antd";
+import { Form, Select, Modal, Input, message } from "antd";
 import { getRolesAPI } from "../../network/role";
 import { addUserAPI, editUserAPI } from "../../network/user";
 const { Option } = Select;
@@ -41,13 +31,13 @@ export default function AddOrEditUserForm(props) {
         //something changed then update
         if (Object.keys(values).length !== 0) {
           values.id = props.user._id;
+          result = await editUserAPI(values);
+          result.data.success &&
+            message.success(result.data.message) &&
+            props.updateUsers(result.data.user, "edit");
+          !result.data.success && message.error(result.data.message);
         }
-        result = await editUserAPI(values);
-        result.data.success &&
-          message.success(result.data.message) &&
-          props.updateUsers(result.data.user, "edit");
       }
-      !result.data.success && message.error(result.data.message);
       props.handleCancel();
     } catch (errorInfo) {
       message.error(errorInfo.toString());
@@ -65,7 +55,7 @@ export default function AddOrEditUserForm(props) {
       email: user.email || null,
       role: user.role || null,
     });
-  }, [user]);
+  }, [user, form]);
   const initialSelectOptions = () => {
     getRolesAPI()
       .then(({ data }) => {

@@ -3,9 +3,10 @@ import { Card, Button, Table, Modal, Input, message } from "antd";
 import PermissionRoleForm from "./permissionRoleForm";
 import { addRoleAPI, getRolesAPI } from "../../network/role";
 import { formatDate } from "../../utils/formatDate";
+import { connect } from "react-redux";
 
 import "./role.less";
-export default function Role() {
+function Role(props) {
   const [permissionDisabled, setPermissionDisabled] = useState(true);
   const [createModalVisible, setCreateModalVisible] = useState(false);
   const [permissionModalVisible, setPermissionModalVisible] = useState(false);
@@ -140,3 +141,7 @@ export default function Role() {
     </Card>
   );
 }
+const mapStateToProps = (state) => ({
+  user: state.user,
+});
+export default connect(mapStateToProps, null)(Role);

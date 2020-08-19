@@ -3,6 +3,8 @@ import { Modal, Input, Form, TreeSelect, message } from "antd";
 import menus from "../../config/menus";
 import { updateRoleAPI } from "../../network/role";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import { LOGOUT } from "../../actions/types";
 
 const { TreeNode } = TreeSelect;
 
@@ -28,17 +30,41 @@ function PermissionRoleForm(props) {
       );
     });
   };
+  const compareTwoLists = (list1, list2) => {
+    if (list1.length !== list2.length) {
+      return false;
+    }
+    return !list1.find((item) => list2.indexOf(item) === -1);
+  };
   const updateRole = () => {
+    if (compareTwoLists(props.row.menus, selectedRights)) {
+      props.handleCancel();
+      return;
+    }
     updateRoleAPI({
       id: props.row._id,
       menus: selectedRights,
       auth_time: Date.now(),
       authorizer: props.user.username,
     })
-      .then(({ data }) =>
-        data.success ? props.handleOK(data.role) : message.error(data.message)
-      )
-      .catch((error) => message.error(error.toString()));
+      .then(({ data }) => {
+        if (data.success) {
+          if (data.role.name === props.user.detail_info.role) {
+            message.success("Your permissions have changed, need to re-login");
+            props.logout_reducer();
+            props.history.replace("/login");
+          } else {
+            props.handleOK(data.role);
+          }
+        } else {
+          message.error(data.message);
+          props.handleCancel();
+        }
+      })
+      .catch((error) => {
+        message.error(error.toString());
+        props.handleCancel();
+      });
   };
   // props.handleOK;
   return (
@@ -74,4 +100,15 @@ function PermissionRoleForm(props) {
 const mapStateToProps = (state) => ({
   user: state.user,
 });
-export default connect(mapStateToProps, null)(PermissionRoleForm);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    logout_reducer: () =>
+      dispatch({
+        type: LOGOUT,
+      }),
+  };
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(PermissionRoleForm));

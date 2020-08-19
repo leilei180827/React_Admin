@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const User = require("../models/user");
+const Role = require("../models/role");
 const bcrypt = require("bcryptjs");
 const jwt_secret = require("../config").secret;
 const jwt = require("jsonwebtoken");
@@ -26,9 +27,9 @@ router.post("/", async (req, res, next) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       throw new Error("Incorrect Password!");
-      // res.status(201).json({ success: false, message: "incorrect password!" });
-      // return;
     }
+    delete user._doc.password;
+    const role = await Role.findOne({ name: user.role });
     const token = jwt.sign(
       { userId: user.id, username: user.username },
       jwt_secret,
@@ -40,10 +41,8 @@ router.post("/", async (req, res, next) => {
       success: true,
       message: "Logged in successfully",
       token: `Bearer ${token}`,
-      user: {
-        id: user._id,
-        username: user.username,
-      },
+      user: user,
+      permissions: role.menus,
     });
     return;
   } catch (error) {

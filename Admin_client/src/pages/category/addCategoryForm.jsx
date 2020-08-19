@@ -1,22 +1,5 @@
 import React from "react";
-import {
-  Form,
-  Select,
-  Input,
-  Typography,
-  Modal,
-  InputNumber,
-  Switch,
-  Radio,
-  Slider,
-  Button,
-  Upload,
-  Rate,
-  Checkbox,
-  Row,
-  Col,
-  message,
-} from "antd";
+import { Form, Select, Input, Modal, message } from "antd";
 import { CATEGORY_ROOT_ID } from "../../utils/constants";
 import { addCategoryAPI } from "../../network/category";
 const { Option } = Select;
@@ -27,7 +10,6 @@ export default function AddCategoryForm(props) {
     console.log(values);
     addCategoryAPI(values)
       .then(({ data }) => {
-        console.log(data);
         data.success &&
           props.currentParentId === values.parentId &&
           props.updateCategories(data.category);
@@ -49,7 +31,7 @@ export default function AddCategoryForm(props) {
       <Form
         ref={formRef}
         initialValues={{
-          ["parentId"]: CATEGORY_ROOT_ID,
+          parentId: CATEGORY_ROOT_ID,
         }}
       >
         <label>Belongs to:</label>

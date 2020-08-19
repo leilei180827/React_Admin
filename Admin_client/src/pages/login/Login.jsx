@@ -4,6 +4,7 @@ import logo from "../../assets/img/logo.png";
 import { Form, Input, Button, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
+import { LOGIN } from "../../actions/types";
 // import { login } from "../../network/login";
 import { login_network } from "../../network/login";
 function Login(props) {
@@ -11,10 +12,11 @@ function Login(props) {
     login_network(values)
       .then(({ data }) => {
         if (data.success) {
-          props.login_reducer({
-            token: data.token,
-            username: data.user.username,
-          });
+          !props.token &&
+            props.login_reducer({
+              token: data.token,
+              user: { ...data.user, menus: data.permissions },
+            });
           props.history.replace("/admin");
         } else {
           message.error(data.message);
@@ -72,9 +74,12 @@ function Login(props) {
     </div>
   );
 }
+const mapStateToProps = (state) => ({
+  token: state.user.token,
+});
 const mapDispatchToProps = (dispatch) => {
   return {
-    login_reducer: (user) => dispatch({ type: "LOGIN", payload: user }),
+    login_reducer: (user) => dispatch({ type: LOGIN, payload: user }),
   };
 };
-export default connect(null, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

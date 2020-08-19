@@ -3,6 +3,7 @@ import LinkButton from "../link_button/link_button";
 import { withRouter } from "react-router-dom";
 import { formatDate } from "../../utils/formatDate";
 import { connect } from "react-redux";
+import { LOGOUT } from "../../actions/types";
 import "./admin_header.less";
 function AdminHeader(props) {
   const [clock, setClock] = useState(Date.now());
@@ -15,14 +16,15 @@ function AdminHeader(props) {
     };
   }, []);
   const logout = () => {
+    props.logout_reducer();
     props.history.replace("/login");
   };
 
   return (
     <div className="admin-header">
       <div className="admin-header-top">
-        <span>Welcome</span> 
-        <span>{props.user.username}</span>
+        <span>Welcome</span>
+        <span>{props.user.detail_info.username}</span>
         <LinkButton onClick={logout}>Logout</LinkButton>
       </div>
       <div className="admin-header-bottom">
@@ -43,7 +45,7 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => {
   return {
-    logout: () => dispatch({ type: "LOGOUT" }),
+    logout_reducer: () => dispatch({ type: LOGOUT }),
   };
 };
 export default connect(

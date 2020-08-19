@@ -5,6 +5,7 @@ import rootReducer from "./reducers/index";
 function saveToLocalStorage(state) {
   try {
     const serializedState = JSON.stringify(state);
+    console.log("update storage")
     localStorage.setItem("user_info", serializedState);
   } catch (e) {
     console.log(e);

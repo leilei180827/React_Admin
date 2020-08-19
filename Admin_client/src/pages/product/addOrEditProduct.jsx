@@ -48,8 +48,6 @@ export default function AddOrEditProduct(props) {
     wrapperCol: { offset: 2, span: 8 },
   };
   const onFinish = (values) => {
-    console.log(values);
-    console.log(product);
     let pCategory =
       values.category.length === 2 ? values.category[0] : CATEGORY_ROOT_ID;
     let category =
@@ -76,11 +74,14 @@ export default function AddOrEditProduct(props) {
     }
     addOrUpdateProductAPI(newProduct)
       .then(({ data }) => {
-        console.log(data);
         data.success && message.success("successfully submitted");
         !data.success && message.error(data.message);
+        props.history.push("/product");
       })
-      .catch((error) => message.error(error.toString()));
+      .catch((error) => {
+        message.error(error.toString());
+        props.history.push("/product");
+      });
   };
   //find changed items
   const collectChangedItems = (productOrigin, productNew) => {
