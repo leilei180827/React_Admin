@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useImperativeHandle } from "react";
+import React, { useState, useImperativeHandle } from "react";
 import { Upload, Modal, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import {

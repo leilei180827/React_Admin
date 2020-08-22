@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button, Input, Table, message, Space } from "antd";
-import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { getProductAPI } from "../../network/product";
-import { addOrUpdateProductAPI, searchProductAPI } from "../../network/product";
+import { addOrUpdateProductAPI } from "../../network/product";
 
 export default function HomeProduct(props) {
   const [products, setProducts] = useState([]);
@@ -61,6 +61,7 @@ export default function HomeProduct(props) {
     props.history.push("/product/update");
   };
   const showProductDetail = (item) => {
+    // console.log("detail called");
     props.history.push({ pathname: "/product/detail", product: item });
   };
   const editProduct = (item) => {

@@ -100,43 +100,44 @@ export default function AddOrEditProduct(props) {
   };
 
   useEffect(() => {
-    prepareCascade();
-  }, []);
-  const prepareCascade = async () => {
-    let options = [];
-    const { data } = await getCategory({ parentId: CATEGORY_ROOT_ID });
-    if (data.success && data.categories.length !== 0) {
-      data.categories.map((item) => {
-        options.push({
-          value: item._id,
-          label: item.name,
-          isLeaf: false,
+    const prepareCascade = async () => {
+      let options = [];
+      const { data } = await getCategory({ parentId: CATEGORY_ROOT_ID });
+      if (data.success && data.categories.length !== 0) {
+        data.categories.map((item) =>
+          options.push({
+            value: item._id,
+            label: item.name,
+            isLeaf: false,
+          })
+        );
+      }
+      if (
+        Object.keys(product).length !== 0 &&
+        product.pCategory !== CATEGORY_ROOT_ID
+      ) {
+        // console.log(product.pCategory);
+        let children = [];
+        const childrenResult = await getCategory({
+          parentId: product.pCategory,
         });
-      });
-    }
-    if (
-      Object.keys(product).length !== 0 &&
-      product.pCategory !== CATEGORY_ROOT_ID
-    ) {
-      console.log(product.pCategory);
-      let children = [];
-      const childrenResult = await getCategory({
-        parentId: product.pCategory,
-      });
-      childrenResult.data.categories.map((item) =>
-        children.push({
-          value: item._id,
-          label: item.name,
-          isLeaf: true,
-        })
-      );
-      children.length !== 0 &&
-        (options.find(
-          (item) => item.value === product.pCategory
-        ).children = children);
-    }
-    setCascaderOptions(options);
-  };
+        childrenResult.data.categories.map((item) =>
+          children.push({
+            value: item._id,
+            label: item.name,
+            isLeaf: true,
+          })
+        );
+        children.length !== 0 &&
+          (options.find(
+            (item) => item.value === product.pCategory
+          ).children = children);
+      }
+      setCascaderOptions(options);
+    };
+    prepareCascade();
+  }, [product]);
+
   const cascaderLoadData = (selectedOptions) => {
     const targetOption = selectedOptions[0];
     if (targetOption.children && targetOption.children.length !== 0) {

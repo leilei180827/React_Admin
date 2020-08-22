@@ -5,7 +5,6 @@ import { getCategoryInfoAPI } from "../../network/category";
 import { CATEGORY_ROOT_ID } from "../../utils/constants";
 export default function DetailProduct(props) {
   const product = props.location.product;
-  console.log(product);
   if (!product) {
     message.error("can't access to product details");
     props.history.push("/product");
@@ -24,40 +23,40 @@ export default function DetailProduct(props) {
     </div>
   );
 
-  const getCategoryNameByIds = () => {
-    if (!product) {
-      return;
-    }
-    if (product.pCategory === CATEGORY_ROOT_ID) {
-      getCategoryInfoAPI({ id: product.category })
-        .then(({ data }) =>
-          data.success
-            ? setCategories({ categoryName: data.category.name })
-            : setCategories({ categoryName: "unknown" })
-        )
-        .catch((error) => message.error(error.toString()));
-    } else {
-      Promise.all([
-        getCategoryInfoAPI({ id: product.pCategory }),
-        getCategoryInfoAPI({ id: product.category }),
-      ])
-        .then((responses) => {
-          responses[0].data.success && responses[1].data.success
-            ? setCategories({
-                pCategoryName: responses[0].data.category.name,
-                categoryName: responses[1].data.category.name,
-              })
-            : setCategories({
-                pCategoryName: "unknown",
-                categoryName: "unknown",
-              });
-        })
-        .catch((error) => message.error(error.toString()));
-    }
-  };
   useEffect(() => {
+    const getCategoryNameByIds = () => {
+      if (!product) {
+        return;
+      }
+      if (product.pCategory === CATEGORY_ROOT_ID) {
+        getCategoryInfoAPI({ id: product.category })
+          .then(({ data }) =>
+            data.success
+              ? setCategories({ categoryName: data.category.name })
+              : setCategories({ categoryName: "unknown" })
+          )
+          .catch((error) => message.error(error.toString()));
+      } else {
+        Promise.all([
+          getCategoryInfoAPI({ id: product.pCategory }),
+          getCategoryInfoAPI({ id: product.category }),
+        ])
+          .then((responses) => {
+            responses[0].data.success && responses[1].data.success
+              ? setCategories({
+                  pCategoryName: responses[0].data.category.name,
+                  categoryName: responses[1].data.category.name,
+                })
+              : setCategories({
+                  pCategoryName: "unknown",
+                  categoryName: "unknown",
+                });
+          })
+          .catch((error) => message.error(error.toString()));
+      }
+    };
     getCategoryNameByIds();
-  }, [getCategoryNameByIds]);
+  }, [product]);
   // if(product){
   //   return ()
   // }else{

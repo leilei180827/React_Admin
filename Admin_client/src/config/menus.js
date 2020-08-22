@@ -1,7 +1,5 @@
 import React from "react";
 import {
-  DesktopOutlined,
-  FileOutlined,
   TeamOutlined,
   UserOutlined,
   HomeOutlined,
