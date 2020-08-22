@@ -1,7 +1,6 @@
 import React from "react";
-import { Row, Col, Card } from "antd";
-import not_found from "../../assets/img/not_found_404.jpg";
-import Link_Button from "../../components/link_button/link_button";
+import { Row, Col } from "antd";
+import LinkButton from "../../components/link_button/link_button";
 import "./not_found.less";
 export default function Not_Found(props) {
   return (
@@ -13,9 +12,9 @@ export default function Not_Found(props) {
           site not found well,this is awkward.The site you're looking for is not
           here.
         </p>
-        <Link_Button onClick={() => props.history.replace("/home")}>
+        <LinkButton onClick={() => props.history.replace("/home")}>
           Back Home
-        </Link_Button>
+        </LinkButton>
       </Col>
     </Row>
   );

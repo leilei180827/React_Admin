@@ -31,7 +31,7 @@ function Category(props) {
       parentId: parentId,
     })
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
         !data.success && message.error(data.message);
         data.success && parentId === "0" && setCategories(data.categories);
         data.success && parentId !== "0" && setSubCategories(data.categories);
@@ -69,7 +69,7 @@ function Category(props) {
       ? setCategories(newCategories)
       : setSubCategories(newCategories);
   };
-  
+
   //add new category
   const cardHeaderExtra = (
     <Button type="primary" onClick={showAddCategoryModal}>

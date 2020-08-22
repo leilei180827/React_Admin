@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, REGISTER, STORE_USER_INFO } from "../actions/types";
+import { LOGIN, LOGOUT, STORE_USER_INFO } from "../actions/types";
 
 const initialState = {
   isLogin: false,

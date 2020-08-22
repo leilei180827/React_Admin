@@ -5,7 +5,6 @@ import { Form, Input, Button, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
 import { LOGIN } from "../../actions/types";
-// import { login } from "../../network/login";
 import { login_network } from "../../network/login";
 function Login(props) {
   const onFinish = (values) => {
