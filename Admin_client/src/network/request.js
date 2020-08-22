@@ -5,7 +5,7 @@ export function request(option) {
     // headers: {
     //   "Content-Type": "application/json",
     // },
-    // baseURL: "/",
+    baseURL: "/api",
   });
 
   //  intercept axios request in order to apply rules like token/loading icon for requests

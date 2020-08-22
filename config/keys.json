@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "mern-admin",
+  "private_key_id": "1588f89b65eb0cb95b092115bf3f7889b7b19543",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCp2w5nqWZrhXSU\n/Y/sk2cJGAnMivbCXpCHe2EH9XbylJbuII9qS+kiuYCmXjwDykl50ZTor7HvX4Pu\nSA+u+dJhAWE0To4j4paMmWyEEbLxQ5TuuS0W+8mslMdVrsPVeYFOoxCdOK8I2DOM\nuEsq93H3JoaVCLmPSqSZiZnDXrakydF9Lu9fZZp4s/PwFOyA4qZGtsNep9UNeddD\nacF3kHpEIU4wmHbL5DWvq5875/4UyQU/Saf/ukIXvH7DT8Ql8ECl00Nn7rKN3tCL\nlBuERFbpoaCKgdkgzUkEMbZrK04Y7xVgQBaOiJ/ZLA31joHfYX1Tk0OcWmfobn3B\n4TReSWcnAgMBAAECggEAAddMUQFRXomkGYKkubVgoNpFg5W0q6dSEmCFomFzDZlg\nsr9gQ+WuEYtIgq/IyhMPjXt2YriXdCG+kKmanz85Rts4o37VJDxuJ035EswM+s0h\nuHNXXXATNS9ToxvG0ZyEiJv/L8UP2J0HSgIsBmYyMlyU3tlTsY2R5SbMUjAc81ec\nGyIl0SGuJKXOMwhfYfwHSpyf03BLOXUD7tbJVTuTarSrrnuaCHlPWq2RTD8VSR8e\n49S+YINco5RZA9Bba/OFS+3m3q/6pH9gCZMDeFRqRyr/bE/9PVRGS5jQ2eDzNp/h\n2V+lpq0RATawuZtkIQtsi9NUwZmE48ha8JO0uEv4AQKBgQDnfub++jpfTln8YpN6\n3qaX7W2dPobjxisSZ+g4LFfJJfL2x1UHNn+f0bI3A728wkHIswf1Nb3FcTDBwcsR\nLqEhnH7pIpKQe+2wHjaxlAcaBhovnLy5TRjVwjBhQqx/ypRAKYEUHQqqAyBnf3G4\nWpkp8xnCmSdjIqchkINN3gSbJwKBgQC71dNPMsZXhLVxLx3TSsA4pP+2BS0TudOd\nJXzoypf2VQyvaYWP/edZr4L3XOh4v9JQgdEuMQhx+uIEyUhtqMOPMnaK1PiqXhlM\nSxvtHkp5OZBbrIKc454AN9/GT9mXjzD6AIIYEhbh6dthKJX5iMmsqijOZu3jBuv6\n6SzmYURUAQKBgFqQfABOlp2Igo3JZtcP2e7f9R0qRA1CDsGxotivCFzqGsZOr0YW\nHRHCMM1zCjyZZrEE0V0t/CMNKDz0+uOq8WC7366HVv1tbkyTVWRde/XDY2UzFWYM\n8mVWBiVWtzN7Zko/sn7S6cQfWwMCidPMpdUShQZrckxHV0k7RxMkg3rLAoGAXc0y\ncWKR2jLTyWoWIuY5iBAeAvAiyq8KFngaIMbLjKB8bTztDjNlzUvww0cKcQKaLMon\nhEHITeNT67/5A4o73s78k+g3Jh1H1OnNUGTIHDG6/YzwzRh+Vu2QOqC1sRI5CyAl\n149xDfCTNbnm6258CFYResG8GpviTLMVURdR4AECgYACad2QHS32vESmzIAeruMV\nub6/Q36kz6p/QFIJ0a+Tdj9drRYXlMikUfEGT+DiFbfVVPFf4nZ8kZezxFi9c/0+\nck5YqgzTXr7NTSSpfPZUh8RZHNSNzY11/DlD4W6Ql+ZFwZtT2DXiespmmmfF2f7B\nuYRgGF5sO2kcQATK5dc6hA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "mern-admin@mern-admin.iam.gserviceaccount.com",
+  "client_id": "107552948653447732259",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/mern-admin%40mern-admin.iam.gserviceaccount.com"
+}
