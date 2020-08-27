@@ -48,6 +48,7 @@ export default function AddOrEditProduct(props) {
     wrapperCol: { offset: 2, span: 8 },
   };
   const onFinish = (values) => {
+    console.log(cascaderOptions);
     let pCategory =
       values.category.length === 2 ? values.category[0] : CATEGORY_ROOT_ID;
     let category =
@@ -96,49 +97,50 @@ export default function AddOrEditProduct(props) {
     return result;
   };
   const onFinishFailed = (errorInfo) => {
+    console.log(cascaderOptions);
     console.log("Failed:", errorInfo);
   };
-
+  const prepareCascade = async () => {
+    let options = [];
+    const { data } = await getCategory({ parentId: CATEGORY_ROOT_ID });
+    if (data.success && data.categories.length !== 0) {
+      data.categories.map((item) =>
+        options.push({
+          value: item._id,
+          label: item.name,
+          isLeaf: false,
+        })
+      );
+    }
+    if (
+      Object.keys(product).length !== 0 &&
+      product.pCategory !== CATEGORY_ROOT_ID
+    ) {
+      // console.log(product.pCategory);
+      let children = [];
+      const childrenResult = await getCategory({
+        parentId: product.pCategory,
+      });
+      childrenResult.data.categories.map((item) =>
+        children.push({
+          value: item._id,
+          label: item.name,
+          isLeaf: true,
+        })
+      );
+      children.length !== 0 &&
+        (options.find(
+          (item) => item.value === product.pCategory
+        ).children = children);
+    }
+    setCascaderOptions(options);
+  };
   useEffect(() => {
-    const prepareCascade = async () => {
-      let options = [];
-      const { data } = await getCategory({ parentId: CATEGORY_ROOT_ID });
-      if (data.success && data.categories.length !== 0) {
-        data.categories.map((item) =>
-          options.push({
-            value: item._id,
-            label: item.name,
-            isLeaf: false,
-          })
-        );
-      }
-      if (
-        Object.keys(product).length !== 0 &&
-        product.pCategory !== CATEGORY_ROOT_ID
-      ) {
-        // console.log(product.pCategory);
-        let children = [];
-        const childrenResult = await getCategory({
-          parentId: product.pCategory,
-        });
-        childrenResult.data.categories.map((item) =>
-          children.push({
-            value: item._id,
-            label: item.name,
-            isLeaf: true,
-          })
-        );
-        children.length !== 0 &&
-          (options.find(
-            (item) => item.value === product.pCategory
-          ).children = children);
-      }
-      setCascaderOptions(options);
-    };
     prepareCascade();
-  }, [product]);
+  }, []);
 
   const cascaderLoadData = (selectedOptions) => {
+    // const targetOption = { ...selectedOptions[0] };
     const targetOption = selectedOptions[0];
     if (targetOption.children && targetOption.children.length !== 0) {
       return;
@@ -147,6 +149,7 @@ export default function AddOrEditProduct(props) {
     // load options lazily
     getCategory({ parentId: targetOption.value })
       .then(({ data }) => {
+        // console.log(data);
         targetOption.loading = false;
         if (!data.success) {
           message.error(data.message);
@@ -163,7 +166,13 @@ export default function AddOrEditProduct(props) {
           );
         children.length === 0
           ? (targetOption.isLeaf = true)
-          : (targetOption.children = children);
+          : (targetOption.children = [...children]);
+        // console.log(targetOption);
+        // let newOptions = [...cascaderOptions];
+        // newOptions = newOptions.map((item) =>
+        //   item.value === targetOption.value ? targetOption : item
+        // );
+        // console.log(newOptions);
         setCascaderOptions([...cascaderOptions]);
       })
       .catch((error) => message.error(error.toString()));

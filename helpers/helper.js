@@ -1,7 +1,8 @@
 const util = require("util");
 const path = require("path");
 const gc = require("../config/index");
-const bucket = gc.bucket("mern-admin.appspot.com"); // should be your bucket name
+// const bucket = gc.bucket("mern-admin.appspot.com"); // should be your bucket name
+const bucket = gc.bucket("cloud-run-mern");
 
 /**
  *

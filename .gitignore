@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 /config/keys.json
+/config/cloud-run-mern.json
 
 # testing
 /coverage

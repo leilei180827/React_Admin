@@ -42,6 +42,7 @@ function Admin(props) {
           if (permissions.indexOf(child.key) !== -1) {
             inMenus = true;
           }
+          return;
         });
       }
       if (!inMenus) {
