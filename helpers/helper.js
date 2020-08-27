@@ -16,6 +16,7 @@ const bucket = gc.bucket("cloud-run-mern");
 const uploadImage = (file) =>
   new Promise((resolve, reject) => {
     const { originalname, buffer } = file;
+    console.log(originalname);
     let rename =
       path.parse(originalname).name +
       "-" +
@@ -23,6 +24,7 @@ const uploadImage = (file) =>
       path.parse(originalname).ext;
 
     const blob = bucket.file(rename.replace(/ /g, "_"));
+    // console.log(bucket);
     const blobStream = blob.createWriteStream({
       resumable: false,
     });
