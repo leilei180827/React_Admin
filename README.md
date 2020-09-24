@@ -10,8 +10,13 @@ https://hub.docker.com/repository/docker/spl220/react-admin-docker and
 https://react-admin-6bb5r4htuq-ts.a.run.app/
 ###
 username and password you may need:
+#
 u:visitor1 p:visitor1
+#
 u:staff1   p: staff1
+#
 u:manager1 p:manager1
+#
 super account!!!!
+#
 u:leilei  p:leilei
